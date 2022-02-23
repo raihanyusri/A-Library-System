@@ -51,17 +51,17 @@ public class MemberSelect extends JPanel {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                CreateMember createMember = new CreateMember();
-//                createMember.initialize();
-//
-//                MainMenu mainMenu = new MainMenu();
-//                mainMenu.setContentPane(createMember);
-//                validate();
+                MemberUpdate updateMember  = new MemberUpdate();
+
+                removeAll();
+                add(updateMember);
+                updateMember.initialize();
+                invalidate();
+                repaint();
             }
         });
         JLabel lbUpdate = new JLabel("Membership update");
         lbUpdate.setFont(mainFont);
-
         JButton btnBack = new JButton("Back To Main Menu");
         btnBack.addActionListener(new ActionListener() {
             @Override
@@ -69,6 +69,8 @@ public class MemberSelect extends JPanel {
                 removeAll();
                 MainMenu mainMenu = new MainMenu();
                 mainMenu.initialize();
+                revalidate();
+                repaint();
             }
         });
 
@@ -87,7 +89,7 @@ public class MemberSelect extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         add(title, BorderLayout.NORTH);
         add(membershipTitle, BorderLayout.WEST);
-        add(buttonsPanel, BorderLayout.EAST);
+        add(buttonsPanel, BorderLayout.CENTER);
         add(btnBack, BorderLayout.SOUTH);
 
 //        add(mainPanel);

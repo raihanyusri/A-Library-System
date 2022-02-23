@@ -7,8 +7,8 @@ import javax.swing.*;
 public class MemberCreate extends JPanel {
 
     private final Font labelFont = new Font("Arial", Font.BOLD, 18);
-    private static Member member;
     private final Font inputFont = new Font("Arial", Font.PLAIN, 18);
+    private static Member member;
 
     public void initialize() {
 
@@ -65,21 +65,32 @@ public class MemberCreate extends JPanel {
         createMemberButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                member = new Member();
-                member.setId(tfMembershipId.getText());
-                member.setName(tfName.getText());
-                member.setFaculty(tfFaculty.getText());
-                member.setPhoneNumber(tfPhoneNumber.getText());
-                member.setEmailAddress(tfEmailAddress.getText());
 
                 EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
                 EntityManager entityManager = entityManagerFactory.createEntityManager();
+                try{
+                    member = new Member();
+                    if(tfMembershipId.getText().length() > 0 && tfName.getText().length() > 0 && tfFaculty.getText().length() > 0 && tfPhoneNumber.getText().length() > 0 && tfEmailAddress.getText().length() > 0) {
+                        member.setId(tfMembershipId.getText());
+                        member.setName(tfName.getText());
+                        member.setFaculty(tfFaculty.getText());
+                        member.setPhoneNumber(tfPhoneNumber.getText());
+                        member.setEmailAddress(tfEmailAddress.getText());
+                    }
 
-                entityManager.getTransaction().begin();
-                entityManager.persist(member);
-                entityManager.getTransaction().commit();
+                    entityManager.getTransaction().begin();
+                    entityManager.persist(member);
+                    entityManager.getTransaction().commit();
 
-                createdText.setText("Member created!");
+                    createdText.setText("Member created!");
+                    MainMenu mainMenu = new MainMenu();
+                    JOptionPane.showMessageDialog(mainMenu, "Success! ALS Membership created.");
+                } catch (PersistenceException ex) {
+                    createdText.setText("Error!");
+                    MainMenu mainMenu = new MainMenu();
+                    JOptionPane.showMessageDialog(mainMenu, "Error! Member already exist; Missing or Incomplete fields.");
+                }
+
 
                entityManagerFactory.close();
             }

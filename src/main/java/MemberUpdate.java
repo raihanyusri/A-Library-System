@@ -7,14 +7,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MemberDelete extends JPanel {
+public class MemberUpdate extends JPanel {
 
     private final Font mainFont = new Font("Arial", Font.BOLD, 18);
     private final Font inputFont = new Font("Arial", Font.PLAIN, 18);
 
     public void initialize() {
 
-        JLabel title = new JLabel("To Delete Member, Please Enter Membership ID:");
+        JLabel title = new JLabel("To Update a Member, Please Enter Membership ID:");
         title.setFont(mainFont);
 
         JLabel lbMembershipId = new JLabel("Membership ID");
@@ -22,53 +22,31 @@ public class MemberDelete extends JPanel {
         JTextField tfMembershipId = new JTextField();
         tfMembershipId.setFont(inputFont);
 
-        JLabel deletedText = new JLabel();
-        deletedText.setFont(mainFont);
-
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(1, 2, 10, 10));
         inputPanel.setOpaque(false);
         inputPanel.add(lbMembershipId);
         inputPanel.add(tfMembershipId);
 
-        JButton btnDeletion = new JButton("Delete Member");
-        btnDeletion.setFont(mainFont);
-        btnDeletion.addActionListener(new ActionListener() {
+        JButton btnUpdate = new JButton("Update Member");
+        btnUpdate.setFont(mainFont);
+        btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
                 EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-                try {
-                    entityManager.getTransaction().begin();
-                    Member toRemove = entityManager.find(Member.class, tfMembershipId.getText());
-                    String message = "Please Confirm Details to Be Correct \n";
-                    message += "Member ID: " + toRemove.getId().toString() +  "\n";
-                    message += "Name: " + toRemove.getName().toString() +  "\n";
-                    message += "Faculty: " + toRemove.getFaculty().toString() +  "\n";
-                    message += "Phone  Number: " + toRemove.getPhoneNumber().toString() +  "\n";
-                    message += "Email address: " + toRemove.getEmailAddress().toString();
-
-                    int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
-
-                    if(selected == JOptionPane.YES_OPTION) {
-                        entityManager.remove(toRemove);
-                        entityManager.getTransaction().commit();
-
-                        deletedText.setText("Member deleted!");
-                    }
-
-                } catch (PersistenceException ex) {
-                    deletedText.setText("Error!");
-                    MainMenu mainMenu = new MainMenu();
-                    JOptionPane.showMessageDialog(mainMenu, "Error! Member has loans, reservations or outstanding fines.");
-                }
-
-                entityManagerFactory.close();
+                Member toUpdate = entityManager.find(Member.class, tfMembershipId.getText());
+                MemberUpdateInformation memberUpdateInformation = new MemberUpdateInformation(toUpdate);
+                removeAll();
+                add(memberUpdateInformation);
+                memberUpdateInformation.initialize();
+                invalidate();
+                repaint();
             }
         });
 
-        JButton backButton = new JButton("Back to Main Menu");
+        JButton backButton = new JButton("Back to Membership Menu");
         backButton.setFont(mainFont);
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -83,8 +61,7 @@ public class MemberDelete extends JPanel {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(1, 2, 10, 10));
         buttonsPanel.setOpaque(false);
-        buttonsPanel.add(deletedText);
-        buttonsPanel.add(btnDeletion);
+        buttonsPanel.add(btnUpdate);
         buttonsPanel.add(backButton);
 
         setLayout(new BorderLayout());
@@ -97,8 +74,8 @@ public class MemberDelete extends JPanel {
     }
 
     public static void main(String[] args) {
-        MemberDelete memberSelect = new MemberDelete();
-        memberSelect.initialize();
+        MemberUpdate memberUpdate = new MemberUpdate();
+        memberUpdate.initialize();
     }
 
 }
