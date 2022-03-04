@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -12,12 +13,27 @@ public class Book {
     private String title;
     @Column(name = "authors")
     private String authors;
+    //private ArrayList<String> authors;
     @Column(name = "isbn")
     private String isbn;
     @Column(name = "publisher")
     private String publisher;
     @Column(name = "publicationYear")
     private String publicationYear;
+    @Column(name = "memberId")
+    private String memberId;
+    @Column(name = "reserveDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date reserveDate;
+    @Column(name = "borrowDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date borrowDate;
+    @Column(name = "dueDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dueDate;
+    @Column(name = "returnDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date returnDate;
 
     public String getAccessionNumber() {
         return accessionNumber;
@@ -65,5 +81,45 @@ public class Book {
 
     public void setPublicationYear(String publicationYear) {
         this.publicationYear = publicationYear;
+    }
+    
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public Date getReserveDate() {
+        return reserveDate;
+    }
+
+    public void setReserveDate(Date reserveDate) {
+        this.reserveDate = reserveDate;
+    }
+
+    public Date getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(Date borrowDate) {
+        this.borrowDate = borrowDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 }

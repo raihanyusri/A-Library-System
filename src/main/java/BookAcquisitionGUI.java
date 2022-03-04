@@ -18,9 +18,6 @@ import javax.swing.JOptionPane;
  */
 public class BookAcquisitionGUI extends javax.swing.JPanel {
 
-    /**
-     * Creates new form BookCreateGUI
-     */
     private Book book;
     
     public BookAcquisitionGUI() {
@@ -286,9 +283,9 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73)
+                        .addGap(52, 52, 52)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47))
+                        .addGap(68, 68, 68))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
@@ -396,11 +393,11 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        MainMenuGUI mainMenu = new MainMenuGUI();
+        BookSelectGUI bookSelectPage = new BookSelectGUI();
         
         removeAll();
         setLayout(new BorderLayout());
-        add(mainMenu);
+        add(bookSelectPage);
         validate();
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
