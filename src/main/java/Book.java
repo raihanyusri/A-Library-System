@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "book")
+@Table(name = "Book")
 public class Book {
     
     @Id
@@ -18,6 +20,33 @@ public class Book {
     private String publisher;
     @Column(name = "publicationYear")
     private String publicationYear;
+    
+    @ManyToOne
+    @JoinColumn(name = "memberId")
+    private Member member;
+    @Column(name = "reserveDate")
+    private Timestamp reserveDate;
+    @Column(name = "borrowDate", nullable=true)
+    private Timestamp borrowDate;
+    @Column(name = "dueDate")
+    private Timestamp dueDate;
+    @Column(name = "returnDate")
+    private Timestamp returnDate;
+
+    public Book() {
+    }
+
+    public Book(String accessionNumber, String title, String authors, String isbn, String publisher, String publicationYear) {
+        this.accessionNumber = accessionNumber;
+        this.title = title;
+        this.authors = authors;
+        this.isbn = isbn;
+        this.publisher = publisher;
+        this.publicationYear = publicationYear;
+    }
+    
+    
+//   
 
     public String getAccessionNumber() {
         return accessionNumber;
@@ -65,5 +94,52 @@ public class Book {
 
     public void setPublicationYear(String publicationYear) {
         this.publicationYear = publicationYear;
+    }
+
+
+    public Timestamp getReserveDate() {
+        return reserveDate;
+    }
+
+    public void setReserveDate(Timestamp reserveDate) {
+        this.reserveDate = reserveDate;
+    }
+    
+        public Timestamp getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(Timestamp borrowDate) {
+        this.borrowDate = borrowDate;
+    }
+
+    public Timestamp getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Timestamp dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Timestamp getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Timestamp returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setReserveMember(Member member) {
+        this.member = member;
+    }
+
+    
+    @Override
+    public String toString() {
+        return "Book title: " + this.title + "\nAuthors: " + this.authors;
     }
 }

@@ -1,7 +1,8 @@
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "member")
+@Table(name = "Member")
 public class Member {
 
     @Id
@@ -15,7 +16,22 @@ public class Member {
     private String phoneNumber;
     @Column(name = "emailAddress")
     private String emailAddress;
+    
+    @OneToMany(mappedBy = "member")
+    private List<Book> reserveBooks;
 
+    public Member() {
+    }
+
+    public Member(String id, String name, String faculty, String phoneNumber, String emailAddress) {
+        this.id = id;
+        this.name = name;
+        this.faculty = faculty;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+    }
+    
+    
 
     public String getId() {
         return id;
@@ -56,4 +72,13 @@ public class Member {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
+    public List<Book> getReserveBooks() {
+        return reserveBooks;
+    }
+
+    public void setReserveBooks(List<Book> reserveBooks) {
+        this.reserveBooks = reserveBooks;
+    }
+
 }
