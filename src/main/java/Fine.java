@@ -1,56 +1,96 @@
-
 import java.io.Serializable;
-import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author kaiyu
+ */
 
 @Entity
-@Table(name = "Fine")
 public class Fine implements Serializable {
-    
-    @EmbeddedId
-    private FineId fineId;
-    
-    @Column(name = "paymentAmount")
-    private Double paymentAmount;
-    
-    @ManyToOne(optional = true)
-    @MapsId("memberId")
-    @JoinColumn(name = "memberId")
-    private Member member;
-    
-    public Fine() {
-    }
 
-    public Fine(FineId fineId, Double paymentAmount, Member member) {
-        this.fineId = fineId;
-        this.paymentAmount = paymentAmount;
-        this.member = member;
-    }
+	
+	@EmbeddedId
+	FineId id;
+	
+	@Column(name = "paymentDate")
+	private String paymentDate;
+	@Column(name = "paymentAmount")
+	private Double paymentAmount;
 
+	public Fine() {
+	}
+	
+	public Fine(FineId id) {
+		this();
+		this.setId(id);
+	}
+	
+	public String getMemberId() {
+		return id.getMemberId();
+	}
+	
+	public String getFineStartDate() {
+		return id.getFineStartDate();
+	}
+	
+	public FineId getFineId() {
+		return id;
+	}
+	
+	public void setId(FineId id) {
+		this.id = id;
+	}
+	
+	public String getPaymentDate() {
+		return paymentDate;
+	}
 
-    public FineId getFineId() {
-        return fineId;
-    }
+	public void setPaymentDate(String paymentDate) {
+		this.paymentDate = paymentDate;
+	}
 
-    public void setFineId(FineId fineId) {
-        this.fineId = fineId;
-    }
+	public Double getPaymentAmount() {
+		return paymentAmount;
+	}
 
-    public Double getPaymentAmount() {
-        return paymentAmount;
-    }
+	public void setPaymentAmount(Double paymentAmount) {
+		this.paymentAmount = paymentAmount;
+	}
+	
+	
+	
 
-    public void setPaymentAmount(Double paymentAmount) {
-        this.paymentAmount = paymentAmount;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 
-    public Member getMember() {
-        return member;
-    }
+	@Override
+	public boolean equals(Object obj) {
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
+		if (this == obj) {
+			return true;
+		}
 
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Fine memberId = (Fine) obj;
+		return this.id.equals(memberId.id);
+	}
 
-    
+	
+
 }

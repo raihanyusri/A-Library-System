@@ -1,48 +1,62 @@
 import java.io.Serializable;
-import java.sql.Timestamp;
-import javax.persistence.*;
+import java.util.Objects;
+import javax.persistence.Embeddable;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author kaiyu
+ */
 @Embeddable
 public class FineId implements Serializable {
-    
-    @Column(name = "memberId")
-    private String memberId;
-    
-    @Column(name = "fineStartDate")
-    private Timestamp fineStartDate;
 
-    public FineId() {
-    }
+	private String memberId;
+	private String fineStartDate;
 
-    public FineId(String memberId, Timestamp fineStartDate) {
-        this.memberId = memberId;
-        this.fineStartDate = fineStartDate;
-    }
+	public FineId() {
 
-    public String getMember() {
-        return memberId;
-    }
+	}
 
-    public void setMember(String memberId) {
-        this.memberId = memberId;
-    }
+	public FineId(String memberId, String fineStartDate) {
+		this.memberId = memberId;
+		this.fineStartDate = fineStartDate;
+	}
 
-    public Timestamp getFineStartDate() {
-        return fineStartDate;
-    }
+	public String getMemberId() {
+		return memberId;
+	}
 
-    public void setFineStartDate(Timestamp fineStartDate) {
-        this.fineStartDate = fineStartDate;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
-    }
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
 
-    @Override
-    public int hashCode() {
-        return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
-    }
+	public String getFineStartDate() {
+		return fineStartDate;
+	}
+
+	public void setFineStartDate(String fineStartDate) {
+		this.fineStartDate = fineStartDate;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(memberId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		FineId fineId = (FineId) obj;
+		return this.memberId.equals(fineId.memberId);
+	}
 
 }

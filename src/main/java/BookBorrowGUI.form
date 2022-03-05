@@ -148,11 +148,17 @@
               <Font name="Helvetica Neue" size="14" style="1"/>
             </Property>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
 =======
 >>>>>>> 39bdb01f88054d2ca43de1223e2a4b89b8793b95
+=======
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
+>>>>>>> origin/Fine-branch
             <Property name="text" type="java.lang.String" value="To Borrow a Book, Please Enter Requested Information Below:"/>
           </Properties>
         </Component>
@@ -218,11 +224,17 @@
           <Font name="Helvetica Neue" size="14" style="1"/>
         </Property>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
 =======
 >>>>>>> 39bdb01f88054d2ca43de1223e2a4b89b8793b95
+=======
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+>>>>>>> origin/Fine-branch
         <Property name="text" type="java.lang.String" value="Borrow Book"/>
       </Properties>
       <Events>
@@ -238,11 +250,17 @@
           <Font name="Helvetica Neue" size="14" style="1"/>
         </Property>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
 =======
 >>>>>>> 39bdb01f88054d2ca43de1223e2a4b89b8793b95
+=======
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+>>>>>>> origin/Fine-branch
         <Property name="text" type="java.lang.String" value="Back to Loans Menu"/>
       </Properties>
       <Events>

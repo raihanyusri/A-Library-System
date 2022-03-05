@@ -41,11 +41,13 @@ public class ReportsMembersWithFinesGUI extends javax.swing.JPanel {
             fines = query.getResultList();
 
             for(Fine fine : fines) {
-                model1.addRow(new Object[]{fine.getMember().getId(), 
-                                            fine.getMember().getName(),
-                                            fine.getMember().getFaculty(),
-                                            fine.getMember().getPhoneNumber(),
-                                            fine.getMember().getEmailAddress()});            
+                String memberId = fine.getMemberId();
+                Member member = entityManager.find(Member.class, memberId);
+                model1.addRow(new Object[]{member.getId(), 
+                                            member.getName(),
+                                            member.getFaculty(),
+                                            member.getPhoneNumber(),
+                                            member.getEmailAddress()});            
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {
