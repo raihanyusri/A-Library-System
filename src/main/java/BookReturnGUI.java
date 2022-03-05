@@ -20,6 +20,8 @@ public class BookReturnGUI extends javax.swing.JPanel {
     public BookReturnGUI() {
         initComponents();
     }
+
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -180,14 +182,9 @@ public class BookReturnGUI extends javax.swing.JPanel {
                 .addContainerGap(46, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
                                      
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-		// TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -197,6 +194,11 @@ public class BookReturnGUI extends javax.swing.JPanel {
 
         Date returnDate = null;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(currentDate);
+//        cal.add(Calendar.DAY_OF_MONTH, 14);
+//        Date dueDate = cal.getTime();
+
         entityManager.getTransaction().begin();
 
         Book bookToReturn = entityManager.find(Book.class, jTextField1.getText());
@@ -265,14 +267,20 @@ public class BookReturnGUI extends javax.swing.JPanel {
                                     
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-		LoanSelectGUI loanSelectPage = new LoanSelectGUI();
-
-		removeAll();
-		setLayout(new BorderLayout());
-		add(loanSelectPage);
-		validate();
-		repaint();
+        LoanSelectGUI loanSelectPage = new LoanSelectGUI();
+        
+        removeAll();
+        setLayout(new BorderLayout());
+        add(loanSelectPage);
+        validate();
+        repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+
+        
+
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
