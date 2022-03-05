@@ -1,10 +1,9 @@
 import java.util.ArrayList;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Book")
+@Table(name = "book")
 public class Book {
     
     @Id
@@ -14,39 +13,27 @@ public class Book {
     private String title;
     @Column(name = "authors")
     private String authors;
+    //private ArrayList<String> authors;
     @Column(name = "isbn")
     private String isbn;
     @Column(name = "publisher")
     private String publisher;
     @Column(name = "publicationYear")
     private String publicationYear;
-    
-    @ManyToOne
-    @JoinColumn(name = "memberId")
-    private Member member;
+    @Column(name = "memberId")
+    private String memberId;
     @Column(name = "reserveDate")
-    private Timestamp reserveDate;
-    @Column(name = "borrowDate", nullable=true)
-    private Timestamp borrowDate;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date reserveDate;
+    @Column(name = "borrowDate")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date borrowDate;
     @Column(name = "dueDate")
-    private Timestamp dueDate;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dueDate;
     @Column(name = "returnDate")
-    private Timestamp returnDate;
-
-    public Book() {
-    }
-
-    public Book(String accessionNumber, String title, String authors, String isbn, String publisher, String publicationYear) {
-        this.accessionNumber = accessionNumber;
-        this.title = title;
-        this.authors = authors;
-        this.isbn = isbn;
-        this.publisher = publisher;
-        this.publicationYear = publicationYear;
-    }
-    
-    
-//   
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date returnDate;
 
     public String getAccessionNumber() {
         return accessionNumber;
@@ -95,51 +82,44 @@ public class Book {
     public void setPublicationYear(String publicationYear) {
         this.publicationYear = publicationYear;
     }
+    
+    public String getMemberId() {
+        return memberId;
+    }
 
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 
-    public Timestamp getReserveDate() {
+    public Date getReserveDate() {
         return reserveDate;
     }
 
-    public void setReserveDate(Timestamp reserveDate) {
+    public void setReserveDate(Date reserveDate) {
         this.reserveDate = reserveDate;
     }
-    
-        public Timestamp getBorrowDate() {
+
+    public Date getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(Timestamp borrowDate) {
+    public void setBorrowDate(Date borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public Timestamp getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Timestamp dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
-    public Timestamp getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Timestamp returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setReserveMember(Member member) {
-        this.member = member;
-    }
-
-    
-    @Override
-    public String toString() {
-        return "Book title: " + this.title + "\nAuthors: " + this.authors;
     }
 }

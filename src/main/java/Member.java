@@ -17,7 +17,7 @@ public class Member {
     @Column(name = "emailAddress")
     private String emailAddress;
     
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "memberId")
     private List<Book> reserveBooks;
 
     public Member() {

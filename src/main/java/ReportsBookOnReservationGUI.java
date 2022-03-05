@@ -45,10 +45,12 @@ public class ReportsBookOnReservationGUI extends javax.swing.JPanel {
             books = query.getResultList();
 
             for(Book book : books) {
+                String memberId = book.getMemberId();
+                Member member = entityManager.find(Member.class, memberId);
                 model1.addRow(new Object[]{book.getAccessionNumber(), 
                                             book.getTitle(),
-                                            book.getMember().getId(),
-                                            book.getMember().getName()});            
+                                            book.getMemberId(),
+                                            member.getName()});            
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {

@@ -6,21 +6,12 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author raihan
- */
-public class BookSelectGUI extends javax.swing.JPanel {
+public class LoanSelectGUI extends javax.swing.JPanel {
 
     private Book book;
     
-    public BookSelectGUI() {
+    public LoanSelectGUI() {
         initComponents();
     }
 
@@ -69,7 +60,7 @@ public class BookSelectGUI extends javax.swing.JPanel {
         jButton1.setBackground(new java.awt.Color(0, 153, 204));
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("4. Acquisition");
+        jButton1.setText("6. Borrow");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -79,7 +70,7 @@ public class BookSelectGUI extends javax.swing.JPanel {
         jButton3.setBackground(new java.awt.Color(0, 102, 153));
         jButton3.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("5. Withdrawal");
+        jButton3.setText("7. Return");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -101,7 +92,7 @@ public class BookSelectGUI extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Books");
+        jLabel8.setText("Loans");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -122,11 +113,11 @@ public class BookSelectGUI extends javax.swing.JPanel {
 
         jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Book Acquisition");
+        jLabel9.setText("Book Borrowing");
 
         jLabel10.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Book Withdrawal");
+        jLabel10.setText("Book Returning");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -149,7 +140,7 @@ public class BookSelectGUI extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(jLabel9))
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addContainerGap(196, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,21 +167,21 @@ public class BookSelectGUI extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        BookAcquisitionGUI acquireBook = new BookAcquisitionGUI();
+        BookBorrowGUI borrowBookPage = new BookBorrowGUI();
         
         removeAll();
         setLayout(new BorderLayout());
-        add(acquireBook);
+        add(borrowBookPage);
         validate();
         repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        BookWithdrawalGUI withdrawBook = new BookWithdrawalGUI();
+        BookReturnGUI returnBookPage = new BookReturnGUI();
         
         removeAll();
         setLayout(new BorderLayout());
-        add(withdrawBook);
+        add(returnBookPage);
         validate();
         repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
