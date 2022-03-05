@@ -22,6 +22,8 @@ public class Book {
     private String publicationYear;
     @Column(name = "memberId")
     private String memberId;
+    @Column(name = "memberRId")
+    private String memberRId;
     @Column(name = "reserveDate")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date reserveDate;
@@ -121,5 +123,13 @@ public class Book {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public String getMemberRId() {
+        return memberRId;
+    }
+
+    public void setMemberRId(String memberRId) {
+        this.memberRId = memberRId;
     }
 }
