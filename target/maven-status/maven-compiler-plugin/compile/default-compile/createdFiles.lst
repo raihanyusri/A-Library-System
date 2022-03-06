@@ -22,6 +22,7 @@ MemberUpdateInformationGUI$5.class
 MemberCreateGUI$3.class
 PaymentGUI$2.class
 ReportsBookSearchGUI$1.class
+PaymentGUI$5.class
 PaymentGUI.class
 ReservationMakeGUI$1.class
 MemberCreateGUI$6.class
@@ -58,6 +59,7 @@ ReportsBookSearchGUI$3.class
 Fine.class
 ReportsMembersWithFinesGUI$1.class
 BookAcquisitionGUI$2.class
+PaymentGUI$4.class
 MainMenuGUI.class
 ReportsBookOnLoanSearchGUI$2.class
 ReservationMakeGUI$2.class
@@ -75,6 +77,7 @@ PaymentGUI$1.class
 MemberUpdateInformationGUI$4.class
 ALSStart.class
 LoanSelectGUI$1.class
+Payment.class
 MemberUpdateInformationGUI$1.class
 BookAcquisitionGUI$5.class
 MainMenuGUI$2.class

@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Embeddable;
 
@@ -15,13 +16,13 @@ import javax.persistence.Embeddable;
 public class FineId implements Serializable {
 
 	private String memberId;
-	private String fineStartDate;
+	private Date fineStartDate;
 
 	public FineId() {
 
 	}
 
-	public FineId(String memberId, String fineStartDate) {
+	public FineId(String memberId, Date fineStartDate) {
 		this.memberId = memberId;
 		this.fineStartDate = fineStartDate;
 	}
@@ -34,11 +35,11 @@ public class FineId implements Serializable {
 		this.memberId = memberId;
 	}
 
-	public String getFineStartDate() {
+	public Date getFineStartDate() {
 		return fineStartDate;
 	}
 
-	public void setFineStartDate(String fineStartDate) {
+	public void setFineStartDate(Date fineStartDate) {
 		this.fineStartDate = fineStartDate;
 	}
 

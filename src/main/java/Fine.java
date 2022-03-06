@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -22,10 +23,10 @@ public class Fine implements Serializable {
 
 	
 	@EmbeddedId
-	FineId id;
+	private FineId id;
 	
 	@Column(name = "paymentDate")
-	private String paymentDate;
+	private Date paymentDate;
 	@Column(name = "paymentAmount")
 	private Double paymentAmount;
 
@@ -41,7 +42,7 @@ public class Fine implements Serializable {
 		return id.getMemberId();
 	}
 	
-	public String getFineStartDate() {
+	public Date getFineStartDate() {
 		return id.getFineStartDate();
 	}
 	
@@ -53,11 +54,11 @@ public class Fine implements Serializable {
 		this.id = id;
 	}
 	
-	public String getPaymentDate() {
+	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(String paymentDate) {
+	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 

@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
 
 public class BookReturnGUI extends javax.swing.JPanel {
 
-    private Member member;
-    private Book book;
-    
-    public BookReturnGUI() {
-        initComponents();
-    }
+	private Member member;
+	private Book book;
 
-    @SuppressWarnings("unchecked")
+	public BookReturnGUI() {
+		initComponents();
+	}
+
+	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -182,104 +182,111 @@ public class BookReturnGUI extends javax.swing.JPanel {
                 .addContainerGap(46, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-                                     
+
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
+		// TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        Date returnDate = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date returnDate = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 //        Calendar cal = Calendar.getInstance();
 //        cal.setTime(currentDate);
 //        cal.add(Calendar.DAY_OF_MONTH, 14);
 //        Date dueDate = cal.getTime();
 
-        entityManager.getTransaction().begin();
+		entityManager.getTransaction().begin();
 
-        Book bookToReturn = entityManager.find(Book.class, jTextField1.getText());
+		Book bookToReturn = entityManager.find(Book.class, jTextField1.getText());
 
-        String returnDateString = jTextField2.getText();
-        try {
-                returnDate = sdf.parse(returnDateString);
-        } catch (ParseException ex) {
-                ex.printStackTrace();
-        }
+		String returnDateString = jTextField2.getText();
+		System.out.println("user input return date: " + returnDateString);
+		System.out.println("book due date: " + bookToReturn.getDueDate());
+		try {
+			returnDate = sdf.parse(returnDateString);
+		} catch (ParseException ex) {
+			ex.printStackTrace();
+		}
 
-        Member returningMember = entityManager.find(Member.class, bookToReturn.getMemberId());
+		Member returningMember = entityManager.find(Member.class, bookToReturn.getMemberId());
 
-        double fineAmount = 0;
+		double fineAmount = 0;
 
-        long diffInDays = returnDate.getTime() - bookToReturn.getDueDate().getTime();
-        if (diffInDays <= 0) {
-                fineAmount = 0;
-        } else {
-                fineAmount = (double) diffInDays;
-        }
+		long diffInDays = returnDate.getTime() - bookToReturn.getDueDate().getTime();
+		System.out.println("returndate time: " + returnDate.getTime());
+		System.out.println("book due date time: " + bookToReturn.getDueDate().getTime());
+		System.out.println("difference in days: " + diffInDays);
+		if (diffInDays <= 0) {
+			fineAmount = 0;
+		} else {
+			int numMillisecondsInADay = 1000*60*60*24;
+			fineAmount = diffInDays/numMillisecondsInADay;
+		}
 
-        String message = "Confirm Return Details to Be Correct \n";
-        message += "Accession Number: " + bookToReturn.getAccessionNumber() + "\n";
-        message += "Book Title: " + bookToReturn.getTitle() + "\n";
-        message += "Borrow Date: " + sdf.format(bookToReturn.getBorrowDate()) + "\n";
-        message += "Membership ID: " + returningMember.getId() + "\n";
-        message += "Member Name: " + returningMember.getName() + "\n";
-        message += "Return Date: " + returnDateString + "\n";
-        message += "Fine: $" + fineAmount;
+		String message = "Confirm Return Details to Be Correct \n";
+		message += "Accession Number: " + bookToReturn.getAccessionNumber() + "\n";
+		message += "Book Title: " + bookToReturn.getTitle() + "\n";
+		message += "Borrow Date: " + sdf.format(bookToReturn.getBorrowDate()) + "\n";
+		message += "Membership ID: " + returningMember.getId() + "\n";
+		message += "Member Name: " + returningMember.getName() + "\n";
+		message += "Return Date: " + returnDateString + "\n";
+		message += "Fine: $" + fineAmount;
 
-        //CREATE FINE ENTITY HERE!!!
-        //gotchu fam
-        int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
+		//CREATE FINE ENTITY HERE!!!
+		//gotchu fam
+		int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
-        if (selected == JOptionPane.YES_OPTION) {
-                if (fineAmount > 0) {
+		if (selected == JOptionPane.YES_OPTION) {
+			if (fineAmount > 0) {
 
-                        String bookDueDate = String.valueOf(bookToReturn.getDueDate().getTime());
-                        FineId fineCompositeKey = new FineId(member.getId(), bookDueDate);
+				String bookDueDate = String.valueOf(bookToReturn.getDueDate().getTime());
+				System.out.println("member id: " + returningMember.getId());
+				FineId fineCompositeKey = new FineId(returningMember.getId(), bookToReturn.getDueDate());
 
-                        Fine totalFine = new Fine(fineCompositeKey);
+				Fine totalFine = new Fine(fineCompositeKey);
 
-                        totalFine.setPaymentAmount(fineAmount);
-                        totalFine.setPaymentDate(returnDateString);
-                        entityManager.persist(totalFine);
-                        MainMenuGUI mainMenu = new MainMenuGUI();
-                        JOptionPane.showMessageDialog(mainMenu, "Error! Book returned successfully but has fines.");
+				totalFine.setPaymentAmount(fineAmount);
+				totalFine.setPaymentDate(returnDate);
+				entityManager.persist(totalFine);
+				entityManager.getTransaction().commit();
+				MainMenuGUI mainMenu = new MainMenuGUI();
+				JOptionPane.showMessageDialog(mainMenu, "Error! Book returned successfully but has fines.");
 
-                } else {
-                        //bookToReturn.setMemberId(null);
-                        //bookToReturn.setBorrowDate(null);
-                        //bookToReturn.setDueDate(null);
-                        bookToReturn.setReturnDate(returnDate);
-                        bookToReturn.setMemberReturnId(returningMember.getId());
+			} else {
+				//bookToReturn.setMemberId(null);
+				//bookToReturn.setBorrowDate(null);
+				//bookToReturn.setDueDate(null);
+				bookToReturn.setReturnDate(returnDate);
+				bookToReturn.setMemberReturnId(returningMember.getId());
 
-                        entityManager.persist(bookToReturn);
-                        entityManager.getTransaction().commit();
+				entityManager.persist(bookToReturn);
+				entityManager.getTransaction().commit();
 
-                        MainMenuGUI mainMenu = new MainMenuGUI();
-                        JOptionPane.showMessageDialog(mainMenu, "Success! Book returned.");
-                }
-        }
+				MainMenuGUI mainMenu = new MainMenuGUI();
+				JOptionPane.showMessageDialog(mainMenu, "Success! Book returned.");
+			}
+		}
 
-        entityManagerFactory.close();
+		entityManagerFactory.close();
     }//GEN-LAST:event_jButton1ActionPerformed
-                                    
+
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        LoanSelectGUI loanSelectPage = new LoanSelectGUI();
-        
-        removeAll();
-        setLayout(new BorderLayout());
-        add(loanSelectPage);
-        validate();
-        repaint();
+		LoanSelectGUI loanSelectPage = new LoanSelectGUI();
+
+		removeAll();
+		setLayout(new BorderLayout());
+		add(loanSelectPage);
+		validate();
+		repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
 
-        
 
     }//GEN-LAST:event_jTextField1ActionPerformed
 
