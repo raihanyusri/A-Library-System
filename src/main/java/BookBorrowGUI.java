@@ -236,10 +236,33 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 //            int numOfFines = query2.getResultList().size();
 
             if(selected == JOptionPane.YES_OPTION) {
-                if (bookToBorrow.getBorrowDate() != null) {
+                try {
+                if (bookToBorrow.getBorrowDate()==null) {
+                    bookToBorrow.setMemberId(jTextField2.getText());
+                    bookToBorrow.setBorrowDate(currentDate);
+                    bookToBorrow.setDueDate(dueDate);
+                    bookToBorrow.setMemberRId(null);
+                    bookToBorrow.setReserveDate(null);
+
+                    entityManager.persist(bookToBorrow);
+                    entityManager.getTransaction().commit();
+                    
                     MainMenuGUI mainMenu = new MainMenuGUI();
-                    JOptionPane.showMessageDialog(mainMenu, "Error! Book currently on loan until: " + bookToBorrow.getDueDate());
-                } else if (numOfborrowedBooks == 2) {
+                    JOptionPane.showMessageDialog(mainMenu, "Success! Book borrowed.");
+                    
+                } else if (bookToBorrow.getBorrowDate()!=null && bookToBorrow.getReturnDate() == null) {
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Book currently on loan until: " + bookToBorrow.getDueDate());
+
+                } else if(bookToBorrow.getBorrowDate()!= null && bookToBorrow.getBorrowDate().compareTo(bookToBorrow.getReturnDate()) >= 0 && !bookToBorrow.getMemberId().equals(bookToBorrow.getMemberReturnId())){
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Book currently on loan until: " + bookToBorrow.getDueDate());     
+                
+                } else if(currentDate.compareTo(bookToBorrow.getReturnDate()) < 0) {
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Book has not been returned yet"); 
+     
+                }else if (numOfborrowedBooks == 2) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Member loan quota exceeded.");
                 } else if (bookToBorrow.getMemberRId() != null &&  !bookToBorrow.getMemberRId().equals(withdrawingMember.getId())) {
@@ -261,6 +284,10 @@ public class BookBorrowGUI extends javax.swing.JPanel {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Success! Book borrowed.");
                 }
+            } catch(NullPointerException ex) 
+                    {
+                      System.out.print("NullPointerException Caught");
+                    }
             }
         }
 

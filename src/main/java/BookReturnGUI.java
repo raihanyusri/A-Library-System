@@ -210,7 +210,7 @@ public class BookReturnGUI extends javax.swing.JPanel {
                 ex.printStackTrace();
         }
 
-        Member withdrawingMember = entityManager.find(Member.class, bookToReturn.getMemberId());
+        Member returningMember = entityManager.find(Member.class, bookToReturn.getMemberId());
 
         double fineAmount = 0;
 
@@ -225,8 +225,8 @@ public class BookReturnGUI extends javax.swing.JPanel {
         message += "Accession Number: " + bookToReturn.getAccessionNumber() + "\n";
         message += "Book Title: " + bookToReturn.getTitle() + "\n";
         message += "Borrow Date: " + sdf.format(bookToReturn.getBorrowDate()) + "\n";
-        message += "Membership ID: " + withdrawingMember.getId() + "\n";
-        message += "Member Name: " + withdrawingMember.getName() + "\n";
+        message += "Membership ID: " + returningMember.getId() + "\n";
+        message += "Member Name: " + returningMember.getName() + "\n";
         message += "Return Date: " + returnDateString + "\n";
         message += "Fine: $" + fineAmount;
 
@@ -249,10 +249,11 @@ public class BookReturnGUI extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(mainMenu, "Error! Book returned successfully but has fines.");
 
                 } else {
-                        bookToReturn.setMemberId(null);
-                        bookToReturn.setBorrowDate(null);
-                        bookToReturn.setDueDate(null);
-                        bookToReturn.setReturnDate(null);
+                        //bookToReturn.setMemberId(null);
+                        //bookToReturn.setBorrowDate(null);
+                        //bookToReturn.setDueDate(null);
+                        bookToReturn.setReturnDate(returnDate);
+                        bookToReturn.setMemberReturnId(returningMember.getId());
 
                         entityManager.persist(bookToReturn);
                         entityManager.getTransaction().commit();
