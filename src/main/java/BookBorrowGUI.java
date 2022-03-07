@@ -195,7 +195,7 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
+       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         
         Date currentDate = new java.util.Date();
@@ -226,29 +226,41 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
-            Query query1 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberId LIKE :id", Book.class);
+            Query query1 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberId LIKE :id ", Book.class);
             query1.setParameter("id", "%" + withdrawingMember.getId() + "%");
             int numOfborrowedBooks = query1.getResultList().size();
+            
+            Query query2 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberReturnId LIKE :id ", Book.class);
+            query2.setParameter("id", "%" + withdrawingMember.getId() + "%");
+            int numOfReturnedBooks = query2.getResultList().size();
+            
+            int numOfFinalBorrowedBooks = numOfborrowedBooks - numOfReturnedBooks; 
 
-            int numOfFines = 0;
-//            Query query2 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id", Fine.class);
-//            query2.setParameter("id", "%" + withdrawingMember.getId() + "%");
-//            int numOfFines = query2.getResultList().size();
+            
+            Query query3 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id", Fine.class);
+            query3.setParameter("id", "%" + withdrawingMember.getId() + "%");
+            int numOfFines = query3.getResultList().size();
 
             if(selected == JOptionPane.YES_OPTION) {
                 try {
-                if (bookToBorrow.getBorrowDate()==null) {
+                if (bookToBorrow.getBorrowDate()==null && numOfFinalBorrowedBooks < 2 && numOfFines == 0) {
                     bookToBorrow.setMemberId(jTextField2.getText());
                     bookToBorrow.setBorrowDate(currentDate);
                     bookToBorrow.setDueDate(dueDate);
                     bookToBorrow.setMemberRId(null);
                     bookToBorrow.setReserveDate(null);
+                    bookToBorrow.setReturnDate(null);
+                    bookToBorrow.setMemberReturnId(null);
 
                     entityManager.persist(bookToBorrow);
                     entityManager.getTransaction().commit();
                     
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Success! Book borrowed.");
+                    
+                }else if (numOfFinalBorrowedBooks == 2) {
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Member loan quota exceeded.");
                     
                 } else if (bookToBorrow.getBorrowDate()!=null && bookToBorrow.getReturnDate() == null) {
                 MainMenuGUI mainMenu = new MainMenuGUI();
@@ -262,9 +274,6 @@ public class BookBorrowGUI extends javax.swing.JPanel {
                 MainMenuGUI mainMenu = new MainMenuGUI();
                 JOptionPane.showMessageDialog(mainMenu, "Error! Book has not been returned yet"); 
      
-                }else if (numOfborrowedBooks == 2) {
-                    MainMenuGUI mainMenu = new MainMenuGUI();
-                    JOptionPane.showMessageDialog(mainMenu, "Error! Member loan quota exceeded.");
                 } else if (bookToBorrow.getMemberRId() != null &&  !bookToBorrow.getMemberRId().equals(withdrawingMember.getId())) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Another member has already reserved this book and it cannot be loaned");
@@ -277,6 +286,8 @@ public class BookBorrowGUI extends javax.swing.JPanel {
                     bookToBorrow.setDueDate(dueDate);
                     bookToBorrow.setMemberRId(null);
                     bookToBorrow.setReserveDate(null);
+                    bookToBorrow.setReturnDate(null);
+                    bookToBorrow.setMemberReturnId(null);
 
                     entityManager.persist(bookToBorrow);
                     entityManager.getTransaction().commit();
@@ -287,11 +298,14 @@ public class BookBorrowGUI extends javax.swing.JPanel {
             } catch(NullPointerException ex) 
                     {
                       System.out.print("NullPointerException Caught");
+                      
                     }
             }
         }
 
         entityManagerFactory.close();
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
