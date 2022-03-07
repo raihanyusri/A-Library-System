@@ -257,9 +257,9 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Success! Book borrowed.");
 
-					} else if (bookToBorrow.getReturnDate() == null) {
-						MainMenuGUI mainMenu = new MainMenuGUI();
-						JOptionPane.showMessageDialog(mainMenu, "Error! Book has not been returned yet");
+					//} else if (bookToBorrow.getReturnDate() == null) {
+					//	MainMenuGUI mainMenu = new MainMenuGUI();
+					//	JOptionPane.showMessageDialog(mainMenu, "Error! Book has not been returned yet");
 					} else if (numOfFinalBorrowedBooks == 2) {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Error! Member loan quota exceeded.");

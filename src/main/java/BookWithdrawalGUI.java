@@ -1,9 +1,12 @@
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 public class BookWithdrawalGUI extends javax.swing.JPanel {
@@ -162,16 +165,27 @@ public class BookWithdrawalGUI extends javax.swing.JPanel {
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
             if(selected == JOptionPane.YES_OPTION) {
-                entityManager.remove(bookToWithdraw);
-                entityManager.getTransaction().commit();
+              
+                if (((bookToWithdraw.getMemberId() != null && bookToWithdraw.getMemberId().equals(bookToWithdraw.getMemberReturnId())) || (bookToWithdraw.getMemberId() == null)) 
+                    && bookToWithdraw.getMemberRId() == null) {
+                    entityManager.remove(bookToWithdraw);
+                    entityManager.getTransaction().commit();
 
-                MainMenuGUI mainMenu = new MainMenuGUI();
-                JOptionPane.showMessageDialog(mainMenu, "Success! Book withdrawn.");
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Success! Book withdrawn.");
+                } else if (bookToWithdraw.getMemberRId() != null){
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Error! Book is currently reserved.");
+                } else {
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Error! Book is currently on loan");
+                }
+                
             }
 
         } catch (PersistenceException ex) {
             MainMenuGUI mainMenu = new MainMenuGUI();
-            JOptionPane.showMessageDialog(mainMenu, "Error! Book has loans, reservations or outstanding fines.");
+            JOptionPane.showMessageDialog(mainMenu, "Error!");
         }
 
         entityManagerFactory.close();

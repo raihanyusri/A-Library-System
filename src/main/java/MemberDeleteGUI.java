@@ -1,9 +1,12 @@
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 /*
@@ -11,7 +14,6 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author raihan
@@ -22,7 +24,7 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
      * Creates new form MemberCreateGUI
      */
     private Member member;
-    
+
     public MemberDeleteGUI() {
         initComponents();
     }
@@ -166,25 +168,68 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
             entityManager.getTransaction().begin();
             Member toRemove = entityManager.find(Member.class, jTextField1.getText());
             String message = "Please Confirm Details to Be Correct \n";
-            message += "Member ID: " + toRemove.getId() +  "\n";
-            message += "Name: " + toRemove.getName() +  "\n";
-            message += "Faculty: " + toRemove.getFaculty() +  "\n";
-            message += "Phone  Number: " + toRemove.getPhoneNumber() +  "\n";
+            message += "Member ID: " + toRemove.getId() + "\n";
+            message += "Name: " + toRemove.getName() + "\n";
+            message += "Faculty: " + toRemove.getFaculty() + "\n";
+            message += "Phone  Number: " + toRemove.getPhoneNumber() + "\n";
             message += "Email address: " + toRemove.getEmailAddress();
 
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
-            if(selected == JOptionPane.YES_OPTION) {
-                entityManager.remove(toRemove);
-                entityManager.getTransaction().commit();
+            if (selected == JOptionPane.YES_OPTION) {
 
-                MainMenuGUI mainMenu = new MainMenuGUI();
-                JOptionPane.showMessageDialog(mainMenu, "Success! Member deleted.");
+                Query query1 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberId LIKE :id AND memberReturnId LIKE :id", Book.class);
+                query1.setParameter("id", "%" + toRemove.getId() + "%");
+
+                Query query2 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id ", Fine.class);
+                query2.setParameter("id", "%" + toRemove.getId() + "%");
+
+                Query query3 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberRId LIKE :id ", Book.class);
+                query3.setParameter("id", "%" + toRemove.getId() + "%");
+
+                if (query1.getResultList().size() != 0 && query2.getResultList().size() == 0 && query3.getResultList().size() == 0) {
+                    //there eexists books with this memberId inside
+                    if (query1.getResultList().size() != 0) {
+                        List<Book> bookList = (ArrayList<Book>) query1.getResultList();
+                        for (Book b : bookList) {
+                            b.setMemberId(null);
+                            b.setMemberReturnId(null);
+                        }
+                    }
+
+                    //if there exists fines with member id inside
+                    if (query2.getResultList().size() != 0) {
+
+                        List<Fine> fineList = (ArrayList<Fine>) query1.getResultList();
+                        for (Fine f : fineList) {
+                            f.setId(null);
+                        }
+                    }
+                    //if there exists books with memberRid inside
+                    if (query3.getResultList().size() != 0) {
+
+                        List<Book> bookList = (ArrayList<Book>) query3.getResultList();
+                        for (Book f : bookList) {
+                            f.setMemberRId(null);
+                        }
+                    }
+
+                    
+                    entityManager.remove(toRemove);
+                    entityManager.getTransaction().commit();
+
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Success! Member deleted.");
+                } else {
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Error! Member has loans, reservations or outstanding fines.");
+                }
+
             }
 
         } catch (PersistenceException ex) {
             MainMenuGUI mainMenu = new MainMenuGUI();
-            JOptionPane.showMessageDialog(mainMenu, "Error! Member has loans, reservations or outstanding fines.");
+            JOptionPane.showMessageDialog(mainMenu, "Error!");
         }
 
         entityManagerFactory.close();
@@ -192,7 +237,7 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         MemberSelectGUI memberSelect = new MemberSelectGUI();
-        
+
         removeAll();
         setLayout(new BorderLayout());
         add(memberSelect);

@@ -279,7 +279,7 @@ public class PaymentGUI extends javax.swing.JPanel {
 		message += "Payment Due: " + paidAmount + "\n";
 		message += "Exact Fee Only" + "\n";
 		message += "Member ID: " + memberId + "\n";
-		message += "Payment Date: " + paymentDate + "\n";
+		message += "Payment Date: " + sdf.format(paymentDate) + "\n";
 
 		int selected = JOptionPane.showConfirmDialog(null, message, "Confirm Payment", JOptionPane.YES_NO_OPTION);
 

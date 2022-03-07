@@ -25,7 +25,7 @@ public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="paymentId")
-	private String paymentId;
+	private Long paymentId;
 	@Column(name="paidAmount")
 	private double paidAmount;
 	@Column(name="paymentDate")
@@ -45,11 +45,11 @@ public class Payment {
 	
 	
 
-	public String getPaymentId() {
+	public Long getPaymentId() {
 		return paymentId;
 	}
 
-	public void setPaymentId(String paymentId) {
+	public void setPaymentId(Long paymentId) {
 		this.paymentId = paymentId;
 	}
 
