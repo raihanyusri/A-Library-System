@@ -1,10 +1,19 @@
 
+import java.awt.BorderLayout;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -251,38 +260,81 @@ public class PaymentGUI extends javax.swing.JPanel {
 		// TODO add your handling code here:
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
 		EntityManager em = entityManagerFactory.createEntityManager();
+		em.getTransaction().begin();
 		Payment payment = new Payment();
 
 		String memberId = jTextField4.getText();
-		String paymentDate = jTextField5.getText();
-		double paymentAmount = Double.valueOf(jTextField5.getText());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-		if (memberId.length() != 0 && paymentDate.length() > 0 && paymentAmount > 0) {
-			Query query = em.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE:inputId", Fine.class);
-			query.setParameter("inputId", memberId);
+		Date paymentDate = null;
+		try {
+			paymentDate = sdf.parse(jTextField5.getText());
+		} catch (ParseException ex) {
+			Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-			if (query.getSingleResult() == null) {
-				//display member has no fine error
-				
-			} else {
-				query = em.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE:inputId AND paymentAmount LIKE:inputAmount", Fine.class);
+		double paidAmount = Double.valueOf(jTextField3.getText());
+
+		String message = "Confirm Return Details to Be Correct \n";
+		message += "Payment Due: " + paidAmount + "\n";
+		message += "Exact Fee Only" + "\n";
+		message += "Member ID: " + memberId + "\n";
+		message += "Payment Date: " + paymentDate + "\n";
+
+		int selected = JOptionPane.showConfirmDialog(null, message, "Confirm Payment", JOptionPane.YES_NO_OPTION);
+
+		if (selected == JOptionPane.YES_OPTION) {
+
+			if (memberId.length() != 0 && paymentDate != null && paidAmount > 0) {
+				Query query = em.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE:inputId", Fine.class);
 				query.setParameter("inputId", memberId);
-				query.setParameter("inputAmount", paymentAmount);
-				if (query.getSingleResult() == null) {
-					//display "wrong payment amount" error message
+				List<Fine> listOfFines = (ArrayList<Fine>) query.getResultList();
+				if (listOfFines.isEmpty()) {
+					//display member has no fine error
+					MainMenuGUI mainMenu = new MainMenuGUI();
+					JOptionPane.showMessageDialog(mainMenu, "Member has no fine!");
 				} else {
-					payment.setMemberId(memberId);
-					payment.setPaymentAmount(paymentAmount);
-					payment.setPaymentDate(paymentDate);
-					em.persist(payment);
+					//member has existing fines
+					//update the fine amount (amount in db is when it was first created; ie when user tried to return the book)
+					boolean correctPayment = false;
+					for (Fine fine : listOfFines) {
+						double updatedFineAmount = ((paymentDate.getTime() - fine.getFineStartDate().getTime()) / (1000 * 60 * 60 * 24));
+						System.out.println("initialAmount: " + fine.getPaymentAmount() + " amountToday: " + updatedFineAmount);
+						if (updatedFineAmount == paidAmount) {
+							payment.setMemberId(memberId);
+							payment.setPaidAmount(paidAmount);
+							payment.setPaymentDate(paymentDate);
+							em.persist(payment);
+							em.getTransaction().commit();
+							correctPayment = true;
+							MainMenuGUI mainMenu = new MainMenuGUI();
+							JOptionPane.showMessageDialog(mainMenu, "Success! Fine payment made.");
+						}
+					}
+
+					if (!correctPayment) {
+						//display "wrong payment amount" error message
+						MainMenuGUI mainMenu = new MainMenuGUI();
+						JOptionPane.showMessageDialog(mainMenu, "Incorrect fine payment amount!");
+					}
 				}
 			}
+
 		}
+
+		entityManagerFactory.close();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-	//back to fines menu button
+//back to fines menu button
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		// TODO add your handling code here:
+		MainMenuGUI mainMenu = new MainMenuGUI();
+
+		removeAll();
+		setLayout(new BorderLayout());
+		add(mainMenu);
+		validate();
+		repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

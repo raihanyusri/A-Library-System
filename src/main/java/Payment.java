@@ -1,4 +1,5 @@
 
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,12 +24,12 @@ public class Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="paymentId")
 	private String paymentId;
-	@Column(name="paymentAmount")
-	private double paymentAmount;
+	@Column(name="paidAmount")
+	private double paidAmount;
 	@Column(name="paymentDate")
-	private String paymentDate;
+	private Date paymentDate;
 	
 	@Column(name="memberId")
 	private String memberId;
@@ -36,8 +37,8 @@ public class Payment {
 	public Payment() {
 	}
 
-	public Payment(double paymentAmount, String paymentDate, String memberId) {
-		this.paymentAmount = paymentAmount;
+	public Payment(double paidAmount, Date paymentDate, String memberId) {
+		this.paidAmount = paidAmount;
 		this.paymentDate = paymentDate;
 		this.memberId = memberId;
 	}
@@ -52,19 +53,19 @@ public class Payment {
 		this.paymentId = paymentId;
 	}
 
-	public double getPaymentAmount() {
-		return paymentAmount;
+	public double getPaidAmount() {
+		return paidAmount;
 	}
 
-	public void setPaymentAmount(double paymentAmount) {
-		this.paymentAmount = paymentAmount;
+	public void setPaidAmount(double paidAmount) {
+		this.paidAmount = paidAmount;
 	}
 
-	public String getPaymentDate() {
+	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(String paymentDate) {
+	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
 
