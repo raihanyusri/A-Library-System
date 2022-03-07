@@ -202,7 +202,7 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
+           EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         Date currentDate = new java.util.Date();
@@ -229,7 +229,6 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
             message += "Reservation Date: " + sdf.format(currentDate) +  "\n";
             message += "Membership ID: " + reservingMember.getId() +  "\n";
             message += "Member Name: " + reservingMember.getName()+  "\n";
-            //message += "Due Date: " + sdf.format(dueDate);
 
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
@@ -237,11 +236,10 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
             query1.setParameter("id", "%" + reservingMember.getId() + "%");
             int numOfReservedBooks = query1.getResultList().size();
 
-            int numOfFines = 0;
-            //            Query query2 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberRId LIKE :id", Fine.class);
-            //            query2.setParameter("id", "%" + reservingMember.getId() + "%");
-            //            int numOfFines = query2.getResultList().size();
-
+           Query query3 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id", Fine.class);
+            query3.setParameter("id", "%" + reservingMember.getId() + "%");
+            int numOfFines = query3.getResultList().size();
+            
             if(selected == JOptionPane.YES_OPTION) {
                 if (bookToReserve.getReserveDate() != null) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
@@ -249,15 +247,16 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
                 } else if (numOfReservedBooks == 2) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Member reservation quota exceeded");
-                } else if (bookToReserve.getBorrowDate() == null) {
-                    MainMenuGUI mainMenu = new MainMenuGUI();
-                    JOptionPane.showMessageDialog(mainMenu, "Error! Book currently available and not on loan");
-                } else if (bookToReserve.getMemberId().equals(reservingMember.getId())) {
+                } else if (bookToReserve.getMemberId() != null && bookToReserve.getMemberId().equals(reservingMember.getId())) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Book is on loan by the same member"); //not sure if this should be en edge case
                 } else if (numOfFines > 0) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Member has outstanding fines");
+                } else if ((bookToReserve.getBorrowDate() == null && bookToReserve.getReturnDate() == null) || bookToReserve.getMemberReturnId() != null && bookToReserve.getMemberId() !=null &&
+                bookToReserve.getMemberReturnId().equals(bookToReserve.getMemberId())) {
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Book currently available and not on loan");
                 } else {
                     bookToReserve.setMemberRId(jTextField2.getText());
                     bookToReserve.setReserveDate(currentDate);
