@@ -305,10 +305,12 @@ public class PaymentGUI extends javax.swing.JPanel {
 							payment.setPaidAmount(paidAmount);
 							payment.setPaymentDate(paymentDate);
 							em.persist(payment);
+							em.remove(fine);
 							em.getTransaction().commit();
 							correctPayment = true;
 							MainMenuGUI mainMenu = new MainMenuGUI();
 							JOptionPane.showMessageDialog(mainMenu, "Success! Fine payment made.");
+							break;
 						}
 					}
 
@@ -324,6 +326,10 @@ public class PaymentGUI extends javax.swing.JPanel {
 
 		entityManagerFactory.close();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+	private void deleteFine(String memberId, Date paymentDate) {
+
+	}
 
 //back to fines menu button
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
