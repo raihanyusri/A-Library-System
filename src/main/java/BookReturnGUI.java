@@ -248,10 +248,15 @@ public class BookReturnGUI extends javax.swing.JPanel {
 				FineId fineCompositeKey = new FineId(returningMember.getId(), bookToReturn.getDueDate());
 
 				Fine totalFine = new Fine(fineCompositeKey);
-
+				
 				totalFine.setPaymentAmount(fineAmount);
 				totalFine.setPaymentDate(returnDate);
 				entityManager.persist(totalFine);
+				
+				bookToReturn.setReturnDate(returnDate);
+                bookToReturn.setMemberReturnId(returningMember.getId());
+				entityManager.persist(bookToReturn);
+
 				entityManager.getTransaction().commit();
 				MainMenuGUI mainMenu = new MainMenuGUI();
 				JOptionPane.showMessageDialog(mainMenu, "Error! Book returned successfully but has fines.");
