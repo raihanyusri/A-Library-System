@@ -5,6 +5,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "book")
 public class Book {
+
+    public String getMemberReturnId() {
+        return memberReturnId;
+    }
+
+    public void setMemberReturnId(String memberReturnId) {
+        this.memberReturnId = memberReturnId;
+    }
     
     @Id
     @Column(name = "accessionNumber")
@@ -24,6 +32,8 @@ public class Book {
     private String memberId;
     @Column(name = "memberRId")
     private String memberRId;
+    @Column(name = "memberReturnId")
+    private String memberReturnId;
     @Column(name = "reserveDate")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date reserveDate;
