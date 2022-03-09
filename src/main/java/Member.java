@@ -16,9 +16,6 @@ public class Member {
     private String phoneNumber;
     @Column(name = "emailAddress")
     private String emailAddress;
-    
-    @OneToMany(mappedBy = "memberId")
-    private List<Book> reserveBooks;
 
     public Member() {
     }
@@ -73,12 +70,5 @@ public class Member {
         this.emailAddress = emailAddress;
     }
 
-    public List<Book> getReserveBooks() {
-        return reserveBooks;
-    }
-
-    public void setReserveBooks(List<Book> reserveBooks) {
-        this.reserveBooks = reserveBooks;
-    }
 
 }

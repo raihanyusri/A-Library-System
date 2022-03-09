@@ -44,12 +44,28 @@ public class ReportsBookOnLoanGUI extends javax.swing.JPanel {
             books = query.getResultList();
 
             for(Book book : books) {
-                model1.addRow(new Object[]{book.getAccessionNumber(), 
+                if(book.getAuthor2().equals("")) {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
                                             book.getTitle(),
-                                            book.getAuthors(),
+                                            book.getAuthor1(),
                                             book.getIsbn(),
                                             book.getPublisher(),
-                                            book.getPublicationYear()});            
+                                            book.getPublicationYear()});
+                } else if (book.getAuthor3().equals("")) {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
+                                            book.getTitle(),
+                                            (book.getAuthor1() + ", " + book.getAuthor2()),
+                                            book.getIsbn(),
+                                            book.getPublisher(),
+                                            book.getPublicationYear()});  
+                } else {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
+                                            book.getTitle(),
+                                            (book.getAuthor1() + ", " + book.getAuthor2() + ", " + book.getAuthor3()),
+                                            book.getIsbn(),
+                                            book.getPublisher(),
+                                            book.getPublicationYear()});   
+                }          
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {

@@ -225,11 +225,11 @@ public class ReservationCancelGUI extends javax.swing.JPanel {
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
             if(selected == JOptionPane.YES_OPTION) {
-                if (!bookToCancelReserve.getMemberRId().equals(reservingMember.getId()) || bookToCancelReserve.getMemberRId()==null) {
+                if (bookToCancelReserve.getMemberReserveId()==null || !bookToCancelReserve.getMemberReserveId().equals(reservingMember.getId())) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Member has no such reservation.");
                 } else {
-                    bookToCancelReserve.setMemberRId(null);
+                    bookToCancelReserve.setMemberReserveId(null);
                     bookToCancelReserve.setReserveDate(null);
                     entityManager.persist(bookToCancelReserve);
                     entityManager.getTransaction().commit();

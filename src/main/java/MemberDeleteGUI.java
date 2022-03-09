@@ -210,7 +210,7 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
 
                         List<Book> bookList = (ArrayList<Book>) query3.getResultList();
                         for (Book f : bookList) {
-                            f.setMemberRId(null);
+                            f.setMemberReserveId(null);
                         }
                     }
 

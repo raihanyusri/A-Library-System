@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -19,9 +18,12 @@ public class Book {
     private String accessionNumber;
     @Column(name = "title")
     private String title;
-    @Column(name = "authors")
-    private String authors;
-    //private ArrayList<String> authors;
+    @Column(name = "author1")
+    private String author1;
+    @Column(name = "author2")
+    private String author2;
+    @Column(name = "author3")
+    private String author3;
     @Column(name = "isbn")
     private String isbn;
     @Column(name = "publisher")
@@ -30,8 +32,8 @@ public class Book {
     private String publicationYear;
     @Column(name = "memberId")
     private String memberId;
-    @Column(name = "memberRId")
-    private String memberRId;
+    @Column(name = "memberReserveId")
+    private String memberReserveId;
     @Column(name = "memberReturnId")
     private String memberReturnId;
     @Column(name = "reserveDate")
@@ -61,15 +63,7 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(String authors) {
-        this.authors = authors;
-    }
+    }  
 
     public String getIsbn() {
         return isbn;
@@ -135,11 +129,35 @@ public class Book {
         this.returnDate = returnDate;
     }
 
-    public String getMemberRId() {
-        return memberRId;
+    public String getMemberReserveId() {
+        return memberReserveId;
     }
 
-    public void setMemberRId(String memberRId) {
-        this.memberRId = memberRId;
+    public void setMemberReserveId(String memberReserveId) {
+        this.memberReserveId = memberReserveId;
+    }
+
+    public String getAuthor1() {
+        return author1;
+    }
+
+    public void setAuthor1(String author1) {
+        this.author1 = author1;
+    }
+
+    public String getAuthor2() {
+        return author2;
+    }
+
+    public void setAuthor2(String author2) {
+        this.author2 = author2;
+    }
+
+    public String getAuthor3() {
+        return author3;
+    }
+
+    public void setAuthor3(String author3) {
+        this.author3 = author3;
     }
 }

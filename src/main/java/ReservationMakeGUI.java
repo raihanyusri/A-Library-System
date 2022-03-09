@@ -258,7 +258,7 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
                 MainMenuGUI mainMenu = new MainMenuGUI();
                 JOptionPane.showMessageDialog(mainMenu, "Error! Book currently available and not on loan");
                 } else {
-                    bookToReserve.setMemberRId(jTextField2.getText());
+                    bookToReserve.setMemberReserveId(jTextField2.getText());
                     bookToReserve.setReserveDate(currentDate);
 
                     entityManager.persist(bookToReserve);

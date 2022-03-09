@@ -372,7 +372,21 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
             if(jTextField1.getText().length() > 0 && jTextField2.getText().length() > 0 && jTextField3.getText().length() > 0 && jTextField4.getText().length() > 0 && jTextField5.getText().length() > 0) {
                 book.setAccessionNumber(jTextField1.getText());
                 book.setTitle(jTextField2.getText());
-                book.setAuthors(jTextField3.getText());
+                
+                String authorsString = jTextField3.getText();
+                String[] authorsArray = authorsString.split(", ");
+                
+                if (authorsArray.length == 0 || authorsArray.length == 1) {
+                    book.setAuthor1(authorsString);
+                } else if (authorsArray.length == 2) {
+                    book.setAuthor1(authorsArray[0]);
+                    book.setAuthor2(authorsArray[1]);
+                } else if (authorsArray.length == 3) {
+                    book.setAuthor1(authorsArray[0]);
+                    book.setAuthor2(authorsArray[1]);
+                    book.setAuthor3(authorsArray[2]);
+                }
+                
                 book.setIsbn(jTextField4.getText());
                 book.setPublisher(jTextField5.getText());
                 book.setPublicationYear(jTextField6.getText());

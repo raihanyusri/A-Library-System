@@ -157,7 +157,15 @@ public class BookWithdrawalGUI extends javax.swing.JPanel {
             String message = "Please Confirm Details to Be Correct \n";
             message += "Accession Number: " + bookToWithdraw.getAccessionNumber()+  "\n";
             message += "Title: " + bookToWithdraw.getTitle()+  "\n";
-            message += "Authors: " + bookToWithdraw.getAuthors() +  "\n";
+            String authors;
+            if (!bookToWithdraw.getAuthor3().equals("")) {
+                authors = bookToWithdraw.getAuthor1() + ", " + bookToWithdraw.getAuthor2() + ", " + bookToWithdraw.getAuthor3();
+            } else if (!bookToWithdraw.getAuthor2().equals("")) {     
+                authors = bookToWithdraw.getAuthor1() + ", " + bookToWithdraw.getAuthor2();
+            } else {
+                authors = bookToWithdraw.getAuthor1();
+            }
+            message += "Authors: " + authors +  "\n";
             message += "ISBN: " + bookToWithdraw.getIsbn() +  "\n";
             message += "Publisher: " + bookToWithdraw.getPublisher() + "\n";
             message += "Year: " + bookToWithdraw.getPublicationYear();
@@ -167,13 +175,13 @@ public class BookWithdrawalGUI extends javax.swing.JPanel {
             if(selected == JOptionPane.YES_OPTION) {
               
                 if (((bookToWithdraw.getMemberId() != null && bookToWithdraw.getMemberId().equals(bookToWithdraw.getMemberReturnId())) || (bookToWithdraw.getMemberId() == null)) 
-                    && bookToWithdraw.getMemberRId() == null) {
+                    && bookToWithdraw.getMemberReserveId() == null) {
                     entityManager.remove(bookToWithdraw);
                     entityManager.getTransaction().commit();
 
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Success! Book withdrawn.");
-                } else if (bookToWithdraw.getMemberRId() != null){
+                } else if (bookToWithdraw.getMemberReserveId() != null){
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Book is currently reserved.");
                 } else {

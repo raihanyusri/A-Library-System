@@ -34,17 +34,32 @@ public class ReportsBookSearchResultsGUI extends javax.swing.JPanel {
     public ReportsBookSearchResultsGUI(JTextField title, JTextField authors, JTextField isbn, JTextField publisher, JTextField year) {
         initComponents();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
+        String authorArray[] = authors.getText().split(",");
+        String author1 = "";
+        String author2 = "";
+        String author3 = "";
+        if (authorArray.length >= 1) {
+            author1 = authorArray[0];
+        } else if (authorArray.length >= 2) {
+            author2 = authorArray[1];
+        } else {
+            author3 = authorArray[2];
+        }
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
             Query query = entityManager.createNativeQuery("SELECT * FROM Book "
                     + "WHERE title LIKE :inTitle "
-                    + "AND authors LIKE :inAuthors "
+                    + "AND author1 LIKE :inAuthor1 "
+                    + "AND author2 LIKE :inAuthor2 "
+                    + "AND author3 LIKE :inAuthor3 "
                     + "AND isbn LIKE :inIsbn "
                     + "AND publisher LIKE :inPublisher "
                     + "AND publicationYear LIKE :inPublicationYear", Book.class);
             query.setParameter("inTitle", "%" + title.getText() + "%");
-            query.setParameter("inAuthors", "%" + authors.getText() + "%");
+            query.setParameter("inAuthor1", "%" + author1 + "%");
+            query.setParameter("inAuthor2", "%" + author2 + "%");
+            query.setParameter("inAuthor3", "%" + author3 + "%");
             query.setParameter("inIsbn", "%" + isbn.getText() + "%");
             query.setParameter("inPublisher", "%" + publisher.getText() + "%");
             query.setParameter("inPublicationYear", "%" + year.getText() + "%");
@@ -53,12 +68,29 @@ public class ReportsBookSearchResultsGUI extends javax.swing.JPanel {
             books = query.getResultList();
 
             for(Book book : books) {
-                model1.addRow(new Object[]{book.getAccessionNumber(), 
+                if(book.getAuthor2().equals("")) {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
                                             book.getTitle(),
-                                            book.getAuthors(),
+                                            book.getAuthor1(),
                                             book.getIsbn(),
                                             book.getPublisher(),
-                                            book.getPublicationYear()});            
+                                            book.getPublicationYear()});
+                } else if (book.getAuthor3().equals("")) {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
+                                            book.getTitle(),
+                                            (book.getAuthor1() + ", " + book.getAuthor2()),
+                                            book.getIsbn(),
+                                            book.getPublisher(),
+                                            book.getPublicationYear()});  
+                } else {
+                    model1.addRow(new Object[]{book.getAccessionNumber(), 
+                                            book.getTitle(),
+                                            (book.getAuthor1() + ", " + book.getAuthor2() + ", " + book.getAuthor3()),
+                                            book.getIsbn(),
+                                            book.getPublisher(),
+                                            book.getPublicationYear()});   
+                }
+                      
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {

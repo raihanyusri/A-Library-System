@@ -246,7 +246,7 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 						bookToBorrow.setMemberId(jTextField2.getText());
 						bookToBorrow.setBorrowDate(currentDate);
 						bookToBorrow.setDueDate(dueDate);
-						bookToBorrow.setMemberRId(null);
+						bookToBorrow.setMemberReserveId(null);
 						bookToBorrow.setReserveDate(null);
 						bookToBorrow.setReturnDate(null);
 						bookToBorrow.setMemberReturnId(null);
@@ -272,11 +272,11 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Error! Book currently on loan until: " + bookToBorrow.getDueDate());
 
-					} else if (currentDate.compareTo(bookToBorrow.getReturnDate()) < 0) {
+					} else if (bookToBorrow.getReturnDate()!= null && currentDate.compareTo(bookToBorrow.getReturnDate()) < 0) {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Error! Book has not been returned yet");
 
-					} else if (bookToBorrow.getMemberRId() != null && !bookToBorrow.getMemberRId().equals(withdrawingMember.getId())) {
+					} else if (bookToBorrow.getMemberReserveId() != null && !bookToBorrow.getMemberReserveId().equals(withdrawingMember.getId())) {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Error! Another member has already reserved this book and it cannot be loaned");
 					} else if (numOfFines > 0) {
@@ -286,7 +286,7 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 						bookToBorrow.setMemberId(jTextField2.getText());
 						bookToBorrow.setBorrowDate(currentDate);
 						bookToBorrow.setDueDate(dueDate);
-						bookToBorrow.setMemberRId(null);
+						bookToBorrow.setMemberReserveId(null);
 						bookToBorrow.setReserveDate(null);
 						bookToBorrow.setReturnDate(null);
 						bookToBorrow.setMemberReturnId(null);
@@ -297,6 +297,7 @@ public class BookBorrowGUI extends javax.swing.JPanel {
 						MainMenuGUI mainMenu = new MainMenuGUI();
 						JOptionPane.showMessageDialog(mainMenu, "Success! Book borrowed.");
 					}
+                                        System.out.println("******* stuck4ever");
 				} catch (NullPointerException ex) {
 					System.out.print("NullPointerException Caught");
 
