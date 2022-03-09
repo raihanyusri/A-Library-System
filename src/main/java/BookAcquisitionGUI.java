@@ -378,9 +378,12 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
                 
                 if (authorsArray.length == 0 || authorsArray.length == 1) {
                     book.setAuthor1(authorsString);
+                    book.setAuthor2("");
+                    book.setAuthor3("");
                 } else if (authorsArray.length == 2) {
                     book.setAuthor1(authorsArray[0]);
                     book.setAuthor2(authorsArray[1]);
+                    book.setAuthor3("");
                 } else if (authorsArray.length == 3) {
                     book.setAuthor1(authorsArray[0]);
                     book.setAuthor2(authorsArray[1]);

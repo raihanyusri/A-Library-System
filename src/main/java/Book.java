@@ -37,16 +37,16 @@ public class Book {
     @Column(name = "memberReturnId")
     private String memberReturnId;
     @Column(name = "reserveDate")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date reserveDate;
     @Column(name = "borrowDate")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date borrowDate;
     @Column(name = "dueDate")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dueDate;
     @Column(name = "returnDate")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date returnDate;
 
     public String getAccessionNumber() {

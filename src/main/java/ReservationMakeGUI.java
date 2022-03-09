@@ -1,8 +1,10 @@
 
 import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -232,7 +234,7 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
 
             int selected = JOptionPane.showConfirmDialog(null, message, "Confirmation", JOptionPane.YES_NO_OPTION);
 
-            Query query1 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberRId LIKE :id", Book.class);
+            Query query1 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberReserveId LIKE :id", Book.class);
             query1.setParameter("id", "%" + reservingMember.getId() + "%");
             int numOfReservedBooks = query1.getResultList().size();
 
@@ -246,13 +248,18 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(mainMenu, "Error! Book has already been reserved by another member");
                 } else if (numOfReservedBooks == 2) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
-                    JOptionPane.showMessageDialog(mainMenu, "Error! Member reservation quota exceeded");
+                    JOptionPane.showMessageDialog(mainMenu, "Error! Member currently has 2 Books on Reservation.");
                 } else if (bookToReserve.getMemberId() != null && bookToReserve.getMemberId().equals(reservingMember.getId())) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
                     JOptionPane.showMessageDialog(mainMenu, "Error! Book is on loan by the same member"); //not sure if this should be en edge case
                 } else if (numOfFines > 0) {
                     MainMenuGUI mainMenu = new MainMenuGUI();
-                    JOptionPane.showMessageDialog(mainMenu, "Member has outstanding fines");
+                    double amount = 0.0;
+                    List<Fine> fines = (ArrayList<Fine>) query3.getResultList();
+                    for (Fine f : fines) {
+                        amount += f.getPaymentAmount();
+                    }
+                    JOptionPane.showMessageDialog(mainMenu, "Member has outstanding fine of: $" + amount);
                 } else if ((bookToReserve.getBorrowDate() == null && bookToReserve.getReturnDate() == null) || bookToReserve.getMemberReturnId() != null && bookToReserve.getMemberId() !=null &&
                 bookToReserve.getMemberReturnId().equals(bookToReserve.getMemberId())) {
                 MainMenuGUI mainMenu = new MainMenuGUI();

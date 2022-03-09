@@ -1,7 +1,9 @@
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +17,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class FineId implements Serializable {
 
+        @Column(name = "memberId")
 	private String memberId;
+        @Column(name = "fineStartDate")
+        @Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date fineStartDate;
 
 	public FineId() {

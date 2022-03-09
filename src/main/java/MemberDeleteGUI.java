@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -184,36 +185,46 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
                 Query query2 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id ", Fine.class);
                 query2.setParameter("id", "%" + toRemove.getId() + "%");
 
-                Query query3 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberRId LIKE :id ", Book.class);
+                Query query3 = entityManager.createNativeQuery("SELECT * FROM Book WHERE memberReserveId LIKE :id ", Book.class);
                 query3.setParameter("id", "%" + toRemove.getId() + "%");
 
-                if (query1.getResultList().size() != 0 && query2.getResultList().size() == 0 && query3.getResultList().size() == 0) {
-                    //there eexists books with this memberId inside
+                if (query1.getResultList().size() == 0 && query2.getResultList().size() == 0 && query3.getResultList().size() == 0) {
+                    entityManager.remove(toRemove);
+                    entityManager.getTransaction().commit();
+
+                    MainMenuGUI mainMenu = new MainMenuGUI();
+                    JOptionPane.showMessageDialog(mainMenu, "Success! Member deleted.");
+                }
+                else if (query1.getResultList().size() != 0 && query2.getResultList().size() == 0 && query3.getResultList().size() == 0) {
+                    //there exists books with this memberId inside
                     if (query1.getResultList().size() != 0) {
                         List<Book> bookList = (ArrayList<Book>) query1.getResultList();
                         for (Book b : bookList) {
                             b.setMemberId(null);
                             b.setMemberReturnId(null);
+                            b.setBorrowDate(null);
+                            b.setDueDate(null);
+                            b.setReturnDate(null);
                         }
                     }
 
-                    //if there exists fines with member id inside
-                    if (query2.getResultList().size() != 0) {
-
-                        List<Fine> fineList = (ArrayList<Fine>) query1.getResultList();
-                        for (Fine f : fineList) {
-                            f.setId(null);
-                        }
-                    }
-                    //if there exists books with memberRid inside
-                    if (query3.getResultList().size() != 0) {
-
-                        List<Book> bookList = (ArrayList<Book>) query3.getResultList();
-                        for (Book f : bookList) {
-                            f.setMemberReserveId(null);
-                        }
-                    }
-
+//                    //if there exists fines with member id inside
+//                    if (query2.getResultList().size() != 0) {
+//
+//                        List<Fine> fineList = (ArrayList<Fine>) query2.getResultList();
+//                        for (Fine f : fineList) {
+//                            f.setId(null);
+//                        }
+//                    }
+//                    //if there exists books with memberRid inside
+//                    if (query3.getResultList().size() != 0) {
+//
+//                        List<Book> bookList = (ArrayList<Book>) query3.getResultList();
+//                        for (Book f : bookList) {
+//                            f.setMemberReserveId(null);
+//                            f.setReserveDate(null);
+//                        }
+//                    }
                     
                     entityManager.remove(toRemove);
                     entityManager.getTransaction().commit();
@@ -229,7 +240,7 @@ public class MemberDeleteGUI extends javax.swing.JPanel {
 
         } catch (PersistenceException ex) {
             MainMenuGUI mainMenu = new MainMenuGUI();
-            JOptionPane.showMessageDialog(mainMenu, "Error!");
+            JOptionPane.showMessageDialog(mainMenu, "Error! Member has loans, reservations or outstanding fines");
         }
 
         entityManagerFactory.close();

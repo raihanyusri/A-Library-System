@@ -260,7 +260,6 @@ public class PaymentGUI extends javax.swing.JPanel {
 		// TODO add your handling code here:
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
 		EntityManager em = entityManagerFactory.createEntityManager();
-		em.getTransaction().begin();
 		Payment payment = new Payment();
 
 		String memberId = jTextField4.getText();
@@ -297,22 +296,38 @@ public class PaymentGUI extends javax.swing.JPanel {
 					//member has existing fines
 					//update the fine amount (amount in db is when it was first created; ie when user tried to return the book)
 					boolean correctPayment = false;
+                                        double updatedFineAmount = 0;
 					for (Fine fine : listOfFines) {
-						double updatedFineAmount = ((paymentDate.getTime() - fine.getFineStartDate().getTime()) / (1000 * 60 * 60 * 24));
+						updatedFineAmount += fine.getPaymentAmount();
 						System.out.println("initialAmount: " + fine.getPaymentAmount() + " amountToday: " + updatedFineAmount);
-						if (updatedFineAmount == paidAmount) {
-							payment.setMemberId(memberId);
-							payment.setPaidAmount(paidAmount);
-							payment.setPaymentDate(paymentDate);
-							em.persist(payment);
-							em.remove(fine);
-							em.getTransaction().commit();
-							correctPayment = true;
-							MainMenuGUI mainMenu = new MainMenuGUI();
-							JOptionPane.showMessageDialog(mainMenu, "Success! Fine payment made.");
-							break;
-						}
+//						if (updatedFineAmount == paidAmount) {
+//							payment.setMemberId(memberId);
+//							payment.setPaidAmount(paidAmount);
+//							payment.setPaymentDate(paymentDate);
+//							em.persist(payment);
+//							em.remove(fine);
+//							em.getTransaction().commit();
+//							correctPayment = true;
+//							MainMenuGUI mainMenu = new MainMenuGUI();
+//							JOptionPane.showMessageDialog(mainMenu, "Success! Fine payment made.");
+//							break;
+//						}
 					}
+                                        
+                                        if (updatedFineAmount == paidAmount) {
+                                            for (Fine fine : listOfFines) {
+                                                em.getTransaction().begin();
+                                                payment.setMemberId(memberId);
+                                                payment.setPaidAmount(paidAmount);
+                                                payment.setPaymentDate(paymentDate);
+                                                em.persist(payment);
+                                                em.remove(fine);
+                                                em.getTransaction().commit();
+                                                correctPayment = true;
+                                            }
+                                                MainMenuGUI mainMenu = new MainMenuGUI();
+                                                JOptionPane.showMessageDialog(mainMenu, "Success! Fine payment made.");
+                                        }
 
 					if (!correctPayment) {
 						//display "wrong payment amount" error message

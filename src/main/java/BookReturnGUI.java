@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -194,6 +195,8 @@ public class BookReturnGUI extends javax.swing.JPanel {
 
 		Date returnDate = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                
 //        Calendar cal = Calendar.getInstance();
 //        cal.setTime(currentDate);
 //        cal.add(Calendar.DAY_OF_MONTH, 14);
@@ -204,10 +207,18 @@ public class BookReturnGUI extends javax.swing.JPanel {
 		Book bookToReturn = entityManager.find(Book.class, jTextField1.getText());
 
 		String returnDateString = jTextField2.getText();
+                String timeNow = java.time.LocalTime.now().toString();
+                String[] timeArray = timeNow.split(":");
+                String hour = timeArray[0];
+                String min = timeArray[1];
+                String secs = timeArray[2].substring(0, 2);
+                String dateTimeString = returnDateString + " " + hour + ":" + min + ":" + secs;
+                
 		System.out.println("user input return date: " + returnDateString);
 		System.out.println("book due date: " + bookToReturn.getDueDate());
 		try {
-			returnDate = sdf.parse(returnDateString);
+			returnDate = sdf2.parse(dateTimeString);
+                        System.out.println("**********************" + returnDate);
 		} catch (ParseException ex) {
 			ex.printStackTrace();
 		}
@@ -242,7 +253,7 @@ public class BookReturnGUI extends javax.swing.JPanel {
 
 		if (selected == JOptionPane.YES_OPTION) {
 			if (fineAmount > 0) {
-
+                                System.out.println("**********************" + returnDate);
 				String bookDueDate = String.valueOf(bookToReturn.getDueDate().getTime());
 				System.out.println("member id: " + returningMember.getId());
 				FineId fineCompositeKey = new FineId(returningMember.getId(), bookToReturn.getDueDate());
@@ -250,11 +261,11 @@ public class BookReturnGUI extends javax.swing.JPanel {
 				Fine totalFine = new Fine(fineCompositeKey);
 				
 				totalFine.setPaymentAmount(fineAmount);
-				totalFine.setPaymentDate(returnDate);
+//				totalFine.setPaymentDate(returnDate);
 				entityManager.persist(totalFine);
 				
 				bookToReturn.setReturnDate(returnDate);
-                bookToReturn.setMemberReturnId(returningMember.getId());
+                                bookToReturn.setMemberReturnId(returningMember.getId());
 				entityManager.persist(bookToReturn);
 
 				entityManager.getTransaction().commit();

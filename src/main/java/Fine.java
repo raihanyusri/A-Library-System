@@ -7,6 +7,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.Temporal;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,8 +26,6 @@ public class Fine implements Serializable {
 	@EmbeddedId
 	private FineId id;
 	
-	@Column(name = "paymentDate")
-	private Date paymentDate;
 	@Column(name = "paymentAmount")
 	private Double paymentAmount;
 
@@ -52,14 +51,6 @@ public class Fine implements Serializable {
 	
 	public void setId(FineId id) {
 		this.id = id;
-	}
-	
-	public Date getPaymentDate() {
-		return paymentDate;
-	}
-
-	public void setPaymentDate(Date paymentDate) {
-		this.paymentDate = paymentDate;
 	}
 
 	public Double getPaymentAmount() {
