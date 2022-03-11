@@ -374,7 +374,7 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
         
         try{
             book = new Book();
-            if(jTextField1.getText().length() > 0 && jTextField2.getText().length() > 0 && jTextField3.getText().length() > 0 && jTextField4.getText().length() > 0 && jTextField5.getText().length() > 0) {
+            if(jTextField1.getText().length() > 0 && jTextField2.getText().length() > 0 && jTextField3.getText().length() > 0 && jTextField4.getText().length() > 0 && jTextField5.getText().length() > 0 && jTextField6.getText().length() > 0) {
                 book.setAccessionNumber(jTextField1.getText());
                 book.setTitle(jTextField2.getText());
                 
@@ -405,10 +405,13 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
                         
                     }
                 }  
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Success! New Book added in Library.");
+            } else {
+                MainMenuGUI mainMenu = new MainMenuGUI();
+                JOptionPane.showMessageDialog(mainMenu, "Error! Book already added; Duplicate, Missing or Incomplete fields.");
             }
 
-            MainMenuGUI mainMenu = new MainMenuGUI();
-            JOptionPane.showMessageDialog(mainMenu, "Success! New Book added in Library.");
         } catch (PersistenceException ex) {
             MainMenuGUI mainMenu = new MainMenuGUI();
             JOptionPane.showMessageDialog(mainMenu, "Error! Book already added; Duplicate, Missing or Incomplete fields.");
