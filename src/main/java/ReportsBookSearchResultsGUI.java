@@ -1,6 +1,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -31,66 +32,54 @@ public class ReportsBookSearchResultsGUI extends javax.swing.JPanel {
     private DefaultTableModel model1;
     private List<Book> books;
     
-    public ReportsBookSearchResultsGUI(JTextField title, JTextField authors, JTextField isbn, JTextField publisher, JTextField year) {
+    public ReportsBookSearchResultsGUI(JTextField title, JTextField author, JTextField isbn, JTextField publisher, JTextField year) {
         initComponents();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
-        String authorArray[] = authors.getText().split(",");
-        String author1 = "";
-        String author2 = "";
-        String author3 = "";
-        if (authorArray.length >= 1) {
-            author1 = authorArray[0];
-        } else if (authorArray.length >= 2) {
-            author2 = authorArray[1];
-        } else {
-            author3 = authorArray[2];
-        }
+        
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
             Query query = entityManager.createNativeQuery("SELECT * FROM Book "
-                    + "WHERE title LIKE :inTitle "
-                    + "AND author1 LIKE :inAuthor1 "
-                    + "AND author2 LIKE :inAuthor2 "
-                    + "AND author3 LIKE :inAuthor3 "
-                    + "AND isbn LIKE :inIsbn "
-                    + "AND publisher LIKE :inPublisher "
-                    + "AND publicationYear LIKE :inPublicationYear", Book.class);
+                    + "LEFT JOIN Author ON Book.accessionNumber = Author.accessionNumber "
+                    + "WHERE Book.title LIKE :inTitle "
+                    + "AND Book.isbn LIKE :inIsbn "
+                    + "AND Book.publisher LIKE :inPublisher "
+                    + "AND Book.publicationYear LIKE :inPublicationYear " 
+                    + "AND Author.name LIKE :inName", Book.class);
             query.setParameter("inTitle", "%" + title.getText() + "%");
-            query.setParameter("inAuthor1", "%" + author1 + "%");
-            query.setParameter("inAuthor2", "%" + author2 + "%");
-            query.setParameter("inAuthor3", "%" + author3 + "%");
             query.setParameter("inIsbn", "%" + isbn.getText() + "%");
             query.setParameter("inPublisher", "%" + publisher.getText() + "%");
             query.setParameter("inPublicationYear", "%" + year.getText() + "%");
+            query.setParameter("inName", "%" + author.getText() + "%");
 
+            books = (ArrayList<Book>) query.getResultList();
 
-            books = query.getResultList();
+            for(int i=0; i<books.size(); i++) {
+                if (i == 0 || !books.get(i).getAccessionNumber().equals(books.get(i-1).getAccessionNumber())) {
+                    String accNumber = books.get(i).getAccessionNumber();
+                    Query query2 = entityManager.createNativeQuery("SELECT DISTINCT * FROM Author WHERE accessionNumber = :inAccNumber", Author.class);
+                    query2.setParameter("inAccNumber", accNumber);
 
-            for(Book book : books) {
-                if(book.getAuthor2().equals("")) {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
-                                            book.getTitle(),
-                                            book.getAuthor1(),
-                                            book.getIsbn(),
-                                            book.getPublisher(),
-                                            book.getPublicationYear()});
-                } else if (book.getAuthor3().equals("")) {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
-                                            book.getTitle(),
-                                            (book.getAuthor1() + ", " + book.getAuthor2()),
-                                            book.getIsbn(),
-                                            book.getPublisher(),
-                                            book.getPublicationYear()});  
-                } else {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
-                                            book.getTitle(),
-                                            (book.getAuthor1() + ", " + book.getAuthor2() + ", " + book.getAuthor3()),
-                                            book.getIsbn(),
-                                            book.getPublisher(),
-                                            book.getPublicationYear()});   
+                    List<Author> authors = (ArrayList<Author>) query2.getResultList();
+                    for (Author a : authors) {
+                        System.out.println(a.getName());
+                    }
+                    String authorsOutput = "";
+                    for(int j=0; j<authors.size(); j++) {
+                        if (j != 0) {
+                            authorsOutput += (", " + authors.get(j).getName());
+                        } else {
+                            authorsOutput += authors.get(j).getName();
+                        }
+                    }
+                    model1.addRow(new Object[]{books.get(i).getAccessionNumber(), 
+                                                books.get(i).getTitle(),
+                                                authorsOutput,
+                                                books.get(i).getIsbn(),
+                                                books.get(i).getPublisher(),
+                                                books.get(i).getPublicationYear()});
                 }
-                      
+    
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {

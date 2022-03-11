@@ -4,26 +4,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "book")
 public class Book {
-
-    public String getMemberReturnId() {
-        return memberReturnId;
-    }
-
-    public void setMemberReturnId(String memberReturnId) {
-        this.memberReturnId = memberReturnId;
-    }
     
     @Id
     @Column(name = "accessionNumber")
     private String accessionNumber;
     @Column(name = "title")
     private String title;
-    @Column(name = "author1")
-    private String author1;
-    @Column(name = "author2")
-    private String author2;
-    @Column(name = "author3")
-    private String author3;
     @Column(name = "isbn")
     private String isbn;
     @Column(name = "publisher")
@@ -136,28 +122,12 @@ public class Book {
     public void setMemberReserveId(String memberReserveId) {
         this.memberReserveId = memberReserveId;
     }
-
-    public String getAuthor1() {
-        return author1;
+    
+    public String getMemberReturnId() {
+        return memberReturnId;
     }
 
-    public void setAuthor1(String author1) {
-        this.author1 = author1;
-    }
-
-    public String getAuthor2() {
-        return author2;
-    }
-
-    public void setAuthor2(String author2) {
-        this.author2 = author2;
-    }
-
-    public String getAuthor3() {
-        return author3;
-    }
-
-    public void setAuthor3(String author3) {
-        this.author3 = author3;
+    public void setMemberReturnId(String memberReturnId) {
+        this.memberReturnId = memberReturnId;
     }
 }

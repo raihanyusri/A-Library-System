@@ -44,28 +44,25 @@ public class ReportsBookOnLoanGUI extends javax.swing.JPanel {
             books = query.getResultList();
 
             for(Book book : books) {
-                if(book.getAuthor2().equals("")) {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
+                String accNumber = book.getAccessionNumber();
+                Query query2 = entityManager.createNativeQuery("SELECT * FROM Author WHERE accessionNumber = :inAccNumber", Author.class);
+                query2.setParameter("inAccNumber", accNumber);
+                
+                List<Author> authors = query2.getResultList();
+                String authorsOutput = "";
+                for(int i=0; i<authors.size(); i++) {
+                    if (i != 0) {
+                        authorsOutput += (", " + authors.get(i).getName());
+                    } else {
+                        authorsOutput += authors.get(i).getName();
+                    }
+                }
+                model1.addRow(new Object[]{book.getAccessionNumber(), 
                                             book.getTitle(),
-                                            book.getAuthor1(),
-                                            book.getIsbn(),
-                                            book.getPublisher(),
-                                            book.getPublicationYear()});
-                } else if (book.getAuthor3().equals("")) {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
-                                            book.getTitle(),
-                                            (book.getAuthor1() + ", " + book.getAuthor2()),
+                                            authorsOutput,
                                             book.getIsbn(),
                                             book.getPublisher(),
                                             book.getPublicationYear()});  
-                } else {
-                    model1.addRow(new Object[]{book.getAccessionNumber(), 
-                                            book.getTitle(),
-                                            (book.getAuthor1() + ", " + book.getAuthor2() + ", " + book.getAuthor3()),
-                                            book.getIsbn(),
-                                            book.getPublisher(),
-                                            book.getPublicationYear()});   
-                }          
             }
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {

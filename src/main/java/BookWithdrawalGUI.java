@@ -157,15 +157,24 @@ public class BookWithdrawalGUI extends javax.swing.JPanel {
             String message = "Please Confirm Details to Be Correct \n";
             message += "Accession Number: " + bookToWithdraw.getAccessionNumber()+  "\n";
             message += "Title: " + bookToWithdraw.getTitle()+  "\n";
-            String authors;
-            if (!bookToWithdraw.getAuthor3().equals("")) {
-                authors = bookToWithdraw.getAuthor1() + ", " + bookToWithdraw.getAuthor2() + ", " + bookToWithdraw.getAuthor3();
-            } else if (!bookToWithdraw.getAuthor2().equals("")) {     
-                authors = bookToWithdraw.getAuthor1() + ", " + bookToWithdraw.getAuthor2();
+            String authorsString;
+            
+            Query query1 = entityManager.createNativeQuery("SELECT * FROM Author WHERE accessionNumber LIKE :id", Author.class);
+            query1.setParameter("id", "%" + bookToWithdraw.getAccessionNumber() + "%");
+            ArrayList<Author> authors = (ArrayList<Author>) query1.getResultList();
+            
+            if (authors.size() == 1) {
+                authorsString = authors.get(0).getName();
             } else {
-                authors = bookToWithdraw.getAuthor1();
+                authorsString = authors.get(0).getName();       
+                
+                for (int i = 1; i < authors.size(); i++) {
+                    authorsString += ", ";
+                    authorsString += authors.get(i).getName();
+                }
             }
-            message += "Authors: " + authors +  "\n";
+            
+            message += "Authors: " + authorsString +  "\n";
             message += "ISBN: " + bookToWithdraw.getIsbn() +  "\n";
             message += "Publisher: " + bookToWithdraw.getPublisher() + "\n";
             message += "Year: " + bookToWithdraw.getPublicationYear();
@@ -176,6 +185,9 @@ public class BookWithdrawalGUI extends javax.swing.JPanel {
               
                 if (((bookToWithdraw.getMemberId() != null && bookToWithdraw.getMemberId().equals(bookToWithdraw.getMemberReturnId())) || (bookToWithdraw.getMemberId() == null)) 
                     && bookToWithdraw.getMemberReserveId() == null) {
+                    for (int i = 0; i < authors.size(); i++) {
+                        entityManager.remove(authors.get(i));
+                    }
                     entityManager.remove(bookToWithdraw);
                     entityManager.getTransaction().commit();
 

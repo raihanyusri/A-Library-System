@@ -1,5 +1,8 @@
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -367,37 +370,42 @@ public class BookAcquisitionGUI extends javax.swing.JPanel {
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.als.jpa");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        ArrayList<Author> authors = new ArrayList<Author>();
+        
         try{
             book = new Book();
             if(jTextField1.getText().length() > 0 && jTextField2.getText().length() > 0 && jTextField3.getText().length() > 0 && jTextField4.getText().length() > 0 && jTextField5.getText().length() > 0) {
                 book.setAccessionNumber(jTextField1.getText());
                 book.setTitle(jTextField2.getText());
                 
-                String authorsString = jTextField3.getText();
-                String[] authorsArray = authorsString.split(", ");
-                
-                if (authorsArray.length == 0 || authorsArray.length == 1) {
-                    book.setAuthor1(authorsString);
-                    book.setAuthor2("");
-                    book.setAuthor3("");
-                } else if (authorsArray.length == 2) {
-                    book.setAuthor1(authorsArray[0]);
-                    book.setAuthor2(authorsArray[1]);
-                    book.setAuthor3("");
-                } else if (authorsArray.length == 3) {
-                    book.setAuthor1(authorsArray[0]);
-                    book.setAuthor2(authorsArray[1]);
-                    book.setAuthor3(authorsArray[2]);
-                }
-                
                 book.setIsbn(jTextField4.getText());
                 book.setPublisher(jTextField5.getText());
                 book.setPublicationYear(jTextField6.getText());
+                
+                entityManager.getTransaction().begin();
+                entityManager.persist(book);
+                entityManager.getTransaction().commit();
+                
+                String authorsString = jTextField3.getText();
+                String[] authorsArray = authorsString.split(","); 
+                
+                if (authorsArray.length == 0 || authorsArray.length == 1) {
+                    AuthorId authorKey = new AuthorId(book.getAccessionNumber(), authorsString);
+                    Author author1 = new Author(authorKey);
+                    entityManager.getTransaction().begin();
+                    entityManager.persist(author1);
+                    entityManager.getTransaction().commit();
+                } else if (authorsArray.length > 1) {
+                    for (int i = 0; i < authorsArray.length; i++) {
+                        AuthorId authorKey = new AuthorId(book.getAccessionNumber(), authorsArray[i]);
+                        Author author = new Author(authorKey);
+                        entityManager.getTransaction().begin();
+                        entityManager.persist(author);
+                        entityManager.getTransaction().commit();
+                        
+                    }
+                }  
             }
-
-            entityManager.getTransaction().begin();
-            entityManager.persist(book);
-            entityManager.getTransaction().commit();
 
             MainMenuGUI mainMenu = new MainMenuGUI();
             JOptionPane.showMessageDialog(mainMenu, "Success! New Book added in Library.");

@@ -38,7 +38,7 @@ public class ReportsBookOnReservationGUI extends javax.swing.JPanel {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Query query = entityManager.createNativeQuery("SELECT Book.accessionNumber,Book.title,Book.author1,Book.author2,Book.author3,Book.isbn,Book.publisher,Book.publicationYear,Book.memberId,Book.memberReserveId,Book.memberReturnId,Book.reserveDate,Book.borrowDate,Book.dueDate,Book.returnDate,"
+            Query query = entityManager.createNativeQuery("SELECT Book.accessionNumber,Book.title,Book.isbn,Book.publisher,Book.publicationYear,Book.memberId,Book.memberReserveId,Book.memberReturnId,Book.reserveDate,Book.borrowDate,Book.dueDate,Book.returnDate,"
                     + "Member.id,Member.name,Member.faculty,Member.phoneNumber,Member.emailAddress FROM Book INNER JOIN Member ON Book.memberReserveId=Member.id", Book.class);
 
 

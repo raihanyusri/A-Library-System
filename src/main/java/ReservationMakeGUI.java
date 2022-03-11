@@ -285,7 +285,7 @@ public class ReservationMakeGUI extends javax.swing.JPanel {
             query1.setParameter("id", "%" + reservingMember.getId() + "%");
             int numOfReservedBooks = query1.getResultList().size();
 
-           Query query3 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id", Fine.class);
+            Query query3 = entityManager.createNativeQuery("SELECT * FROM Fine WHERE memberId LIKE :id", Fine.class);
             query3.setParameter("id", "%" + reservingMember.getId() + "%");
             int numOfFines = query3.getResultList().size();
             
